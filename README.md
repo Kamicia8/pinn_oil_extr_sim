@@ -1,1 +1,1 @@
-# pinn_oil_extr_sim
+## Modeling oil extraction using Physics-Informed Neural Networks (PINN)
