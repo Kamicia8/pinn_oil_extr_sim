@@ -8,6 +8,8 @@ from pathlib import Path
 from dolfinx.io import XDMFFile
 import csv
 from scipy.interpolate import RegularGridInterpolator
+import dolfinx.geometry as geometry
+from scipy.interpolate import griddata
 
 #dane SPE model 1, więcej info w spe_data.ipynb
 REAL_NX, REAL_NY = 100, 20
@@ -152,47 +154,45 @@ metrics_file.close()
 
 
 # DANE DO PORÓWNANIA Z PINN 
-def get_values_at_points(points, function):
-    from dolfinx import geometry
 
-    #konwertujemy punkty 2D na 3D, ustawiając z=0
-    points_3d = np.zeros((points.shape[0], 3), dtype=np.float64)
-    points_3d[:, :2] = points
-
-    #pozwala szybko sprawdzić, w której części siatki szukać punktu, zamiast przeszukiwać każdą komórkę po kolei
-    bb_tree = geometry.bb_tree(domain, domain.topology.dim)
-
-    cell_candidates = geometry.compute_collisions_points(bb_tree, points_3d)
-
-    colliding_cells = geometry.compute_colliding_cells(domain, cell_candidates, points_3d)
-
-    values = np.full(points.shape[0], np.nan)
-
-    for i in range(points.shape[0]):
-        cells = colliding_cells.links(i)
-        if len(cells) > 0:
-            #jeśli punkt jest w siatce, pobierz wartość funkcji w tym punkcie
-            values[i] = function.eval(points_3d[i:i+1], np.array([cells[0]], dtype=np.int32))[0]
-
-    return values
-
-
-#tworzymy siatkę punktów do porównania 100x100
 x_test = np.linspace(0, REAL_LX, 100)
 y_test = np.linspace(0, REAL_LY, 100)
 X, Y = np.meshgrid(x_test, y_test)
-pts_to_eval = np.vstack((X.flatten(), Y.flatten())).T #punkty w formacie 10000x2 
+pts_to_eval = np.vstack((X.flatten(), Y.flatten())).T
+points_3d = np.zeros((pts_to_eval.shape[0], 3), dtype=np.float64)
+points_3d[:, :2] = pts_to_eval
 
-#pobieramy wartości końcowego rozwiązania uh
-if MPI.COMM_WORLD.rank == 0:
-    u_fenics_values = get_values_at_points(pts_to_eval, uh)
-else:
-    u_fenics_values = None
+bb_tree = geometry.bb_tree(domain, domain.topology.dim)
+cell_candidates = geometry.compute_collisions_points(bb_tree, points_3d)
+colliding_cells = geometry.compute_colliding_cells(domain, cell_candidates, points_3d)
 
-if MPI.COMM_WORLD.rank == 0:
+local_values = []
+local_pts = []
+
+for i in range(points_3d.shape[0]):
+    cells = colliding_cells.links(i)
+    if len(cells) > 0:
+        val = uh.eval(points_3d[i:i+1], np.array([cells[0]], dtype=np.int32))
+        local_values.append(val[0])
+        local_pts.append(pts_to_eval[i])
+
+local_values = np.array(local_values)
+local_pts = np.array(local_pts)
+
+all_values = domain.comm.gather(local_values, root=0)
+all_pts = domain.comm.gather(local_pts, root=0)
+
+if domain.comm.rank == 0:
+    flat_values = np.concatenate(all_values)
+    flat_pts = np.concatenate(all_pts)
+    
+    U_final = griddata(flat_pts, flat_values, (X, Y), method='linear')
+
     comparison_data = {
         "x": X,
         "y": Y,
-        "u_fenics": u_fenics_values.reshape(X.shape)
+        "u_fenics": U_final
     }
-    np.save("results/metrics/fenics_for_pinn_comparison.npy", comparison_data)
+    
+    output_path = "results/metrics/fenics_for_pinn_comparison.npy"
+    np.save(output_path, comparison_data)
