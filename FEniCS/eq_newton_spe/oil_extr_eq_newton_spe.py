@@ -17,7 +17,7 @@ REAL_LX, REAL_LY = 762.0, 15.24
 
 #skalowanie danych do zakresu [1, 10] 
 def load_and_scale_kq(path):
-    raw_data = np.loadtxt(path).flatten()[:2000] #zamieniay na długi wektor i bierzemy 200 pierwszych elementów bo 100*20 to 2000
+    raw_data = np.loadtxt(path).flatten()[:2000] #zamieniay na długi wektor i bierzemy 2000 pierwszych elementów bo 100*20 to 2000
     k_min, k_max = raw_data.min(), raw_data.max()
     k_scaled = (raw_data - k_min) / (k_max - k_min) * (10.0 - 1.0) + 1.0
     return k_scaled.reshape((REAL_NY, REAL_NX)) #wracamy do kształtu macierzy
@@ -64,7 +64,7 @@ h = fem.Function(V)
 h.interpolate(lambda x: 1.0 + np.sin(2*np.pi*x[0]/REAL_LX) * np.sin(2*np.pi*x[1]/REAL_LY))
 
 dt = 0.001
-T = 2.0
+T = 1.0
 num_steps = int(T/dt)
 
 #nienane rozwiązanie
@@ -108,7 +108,7 @@ xdmf_file.write_mesh(domain)
 
 metrics_file = open("results/metrics/metrics.csv", "w", newline="")
 csv_writer = csv.writer(metrics_file)
-csv_writer.writerow(["time", "delta_L2", "max_u", "mean_u"])
+csv_writer.writerow(["time", "energy", "delta_L2", "max_u", "mean_u"])
 
 for n in range(num_steps):
     t = (n + 1) * dt #aktualny czas
@@ -134,6 +134,14 @@ for n in range(num_steps):
 
     max_u = domain.comm.allreduce(np.max(uh.x.array), op=MPI.MAX)
 
+    energy_local = fem.assemble_scalar(
+        fem.form(uh**2 * dx)
+    )
+
+    energy = domain.comm.allreduce(
+        energy_local, op=MPI.SUM
+    )
+
     delta_L2_local = fem.assemble_scalar(
     fem.form((uh - u_n)**2 * dx)
     )
@@ -143,7 +151,7 @@ for n in range(num_steps):
     )
     
     if MPI.COMM_WORLD.rank == 0:
-        csv_writer.writerow([t, delta_L2, max_u, mean_u]) 
+        csv_writer.writerow([t, energy, delta_L2, max_u, mean_u]) 
         print(f"Step {n+1}/{num_steps}, t={t:.3f}, max_u: {max_u:.4e}, iterations: {num_its}")
     
     #aktualizacja rozwiązania na kolejny krok czasowy
