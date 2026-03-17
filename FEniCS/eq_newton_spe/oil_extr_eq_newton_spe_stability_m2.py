@@ -22,16 +22,19 @@ REAL_LY = REAL_NY * 10 * FT_TO_M # ok. 670.56 m
 
 #skalowanie danych do zakresu [1, 10] 
 def load_and_scale_kq(path):
-    # Wczytujemy już gotową, wyciętą warstwę
     kq_layer = np.load(path) # Macierz (220, 60)
     
-    # Skalowanie do zakresu [1, 10]
-    k_min, k_max = kq_layer.min(), kq_layer.max()
-    k_scaled = (kq_layer - k_min) / (k_max - k_min) * (10.0 - 1.0) + 1.0
+    log_kq = np.log10(kq_layer + 1e-6)
     
-    return k_scaled
+    max_scale = 100.0
 
-kq_data_matrix = load_and_scale_kq('spe_model2_layer50.npy')
+    l_min, l_max = log_kq.min(), log_kq.max()
+    k_scaled = (log_kq - l_min) / (l_max - l_min) * (max_scale - 1.0) + 1.0
+    scale = (1.0, max_scale)
+    
+    return k_scaled, scale
+
+kq_data_matrix, scale = load_and_scale_kq('spe_model2_layer50.npy')
 
 #interpolator
 x_coords = np.linspace(0, REAL_LX, REAL_NX)
@@ -47,7 +50,7 @@ Path("results/fields").mkdir(parents=True, exist_ok=True)
 Path("results/metrics").mkdir(parents=True, exist_ok=True)
 
 #MPI.COMM_WORLD to komunikator dla wszystkich procesów
-#tworze prostokąt o początku w 0,0 i końcu w wymiarach podanych w SPE, calosć dziele na 100x20 elementów
+#tworze prostokąt o początku w 0,0 i końcu w wymiarach podanych w SPE
 
 domain = mesh.create_rectangle(MPI.COMM_WORLD, 
                                [np.array([0, 0]), np.array([REAL_LX, REAL_LY])], 
@@ -62,6 +65,8 @@ def kq_map(x):
     pts = np.stack((x[1], x[0]), axis=-1) #zamieniony x z y, odwrotnie do tego jak zdefiniowaliśmy interpolator
     return interp_kq(pts) #interpolator oblicza wartość przepuszczalności w tych punktach
 
+
+
 Kq.interpolate(kq_map) #wypełniamy siatkę wartościami przepuszczalności
 
 u_n = fem.Function(V)
@@ -70,28 +75,29 @@ u_n.interpolate(lambda x: np.where(np.sqrt((x[0]-REAL_LX/2)**2 + (x[1]-REAL_LY/2
 
 h = fem.Function(V)
 #funkcja źródła h(x) w 2D
-h.interpolate(lambda x: 1.0 + np.sin(2*np.pi*x[0]/REAL_LX) * np.sin(2*np.pi*x[1]/REAL_LY))
-# h.interpolate(lambda x: 0*x[0])
+# h.interpolate(lambda x: 1.0 + np.sin(2*np.pi*x[0]/REAL_LX) * np.sin(2*np.pi*x[1]/REAL_LY))
+h.interpolate(lambda x: 0*x[0])
 
-dt = 1.0
-T = 3000.0
+dt = 0.01
+T = 50.0
 num_steps = int(T/dt)
+name = f"FEniCS_T{T}_dt{dt}"
 
 if MPI.COMM_WORLD.rank == 0:
     wandb.init(
         project="PINN-FEniCS-Comparison",
-        name="FEniCS_T3000_dt1.0",
+        name=name,
         config={
             "T": T,
             "dt": dt,
             "NX": REAL_NX,
             "NY": REAL_NY,
-            "scaling": "1-10",
+            "scaling": scale,
             "layer": 50
         }
     )
 
-#nienane rozwiązanie
+#nieznane rozwiązanie
 uh = fem.Function(V)
 
 #funkcja testowa do słabego sformułowania
@@ -127,10 +133,10 @@ petsc_options = {
 problem = NonlinearProblem(F, uh, bcs=[bc], petsc_options=petsc_options, petsc_options_prefix="TimeStep")
 
 
-xdmf_file = XDMFFile(MPI.COMM_WORLD, "results/fields/solution_stability_m2.xdmf", "w") #dane wizualne
+xdmf_file = XDMFFile(MPI.COMM_WORLD, f"results/fields/solution_T{T}_dt{dt}.xdmf", "w") #dane wizualne
 xdmf_file.write_mesh(domain) 
 
-metrics_file = open("results/metrics/metrics_stability_m2.csv", "w", newline="")
+metrics_file = open(f"results/metrics/metrics_T{T}_dt{dt}.csv", "w", newline="")
 csv_writer = csv.writer(metrics_file)
 csv_writer.writerow(["time", "energy", "delta_L2", "max_u", "mean_u"])
 
@@ -184,6 +190,7 @@ for n in range(num_steps):
             "max_u": max_u,
             "mean_u": mean_u,
             "energy": energy,
+            "delta_L2": delta_L2,
             "newton_iterations": num_its
         })
     
@@ -237,22 +244,15 @@ if domain.comm.rank == 0:
         "kq_scaled": kq_data_matrix
     }
     
-    output_path = "results/metrics/fenics_for_pinn_comparison_stability_m2.npy"
+    output_path = f"results/metrics/fenics_for_pinn_T{T}_dt{dt}.npy"
     np.save(output_path, comparison_data)
 
-    # plt.figure(figsize=(6, 10))
-    # plt.imshow(U_final, extent=[0, REAL_LX, 0, REAL_LY], cmap='jet', origin='lower')
-    # plt.colorbar(label="Ciśnienie u")
-    # plt.title("Bitmapa wynikowa FEniCS - rozwiązanie referencyjne")
-    # plt.savefig("results/metrics/fenics_ground_truth_map.png")
-    plt.figure(figsize=(6, 10))
+    plt.figure(figsize=(10, 14))
     plt.imshow(U_final, extent=[0, REAL_LX, 0, REAL_LY], cmap='jet', origin='lower')
     plt.colorbar(label="Ciśnienie u")
     plt.title(f"Bitmapa wynikowa FEniCS - rozwiązanie referencyjne T={T}")
     
-    # Wysyłamy obraz do dashboardu
     wandb.log({"final_solution_map": wandb.Image(plt)})
     plt.close()
     
-    # Kończymy sesję
     wandb.finish()
