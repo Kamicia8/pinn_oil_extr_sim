@@ -1,0 +1,8 @@
+results/
+data/*.npy
+wandb/
+__pycache__/
+*.xdmf
+*.h5
+*.dat
+*.npy

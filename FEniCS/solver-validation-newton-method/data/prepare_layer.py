@@ -1,8 +1,8 @@
 import numpy as np
 
 NX, NY, NZ = 60, 220, 85
-PATH_INPUT = r'/mnt/c/PINN_mgr/spe_perm_model2.dat'
-PATH_OUTPUT = 'spe_model2_layer50.npy'
+PATH_INPUT = r'/mnt/c/PINN_mgr/data_SPE/spe_perm_model2.dat'
+PATH_OUTPUT = r'/mnt/c/PINN_mgr/FEniCS/solver-validation-newton-method/data/spe_model2_layer50.npy'
 
 def extract_and_save_layer(layer_idx=50):
     raw_data = np.fromfile(PATH_INPUT, sep=' ')
@@ -14,8 +14,7 @@ def extract_and_save_layer(layer_idx=50):
     layer = kx_3d[layer_idx, :, :]
     
     np.save(PATH_OUTPUT, layer)
-    print(f"Warstwa {layer_idx} zapisana w {PATH_OUTPUT}")
-    print(f"Kształt macierzy: {layer.shape}")
+    print(f"Kształt macierzy {layer.shape}")
 
 if __name__ == "__main__":
     extract_and_save_layer()
