@@ -16,7 +16,7 @@ from physics import get_nonlinear_K, get_variational_form
 
 def main():
     if MPI.COMM_WORLD.rank == 0:
-        run = wandb.init(project="PINN-FEniCS-Comparison") 
+        run = wandb.init(project="FEniCS-solver-for-comparison") 
         params = wandb.config.set
 
         config = [params["dt"], params["T"], params["u_coeff"], params["h_type"]]
