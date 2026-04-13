@@ -1,5 +1,5 @@
 ## Modelowanie procesów wydobycia ropy naftowej z użyciem Physics-Informed Neural Networks (PINN)
-## Modeling oil extraction using Physics-Informed Neural Networks (PINN)
+### Modeling oil extraction using Physics-Informed Neural Networks (PINN)
 
 Kod źródłowy pracy dyplomowej pisanej na Wydziale Informatyki (Informatyka - Data Science) na uczelni AGH w Krakowie.
 
