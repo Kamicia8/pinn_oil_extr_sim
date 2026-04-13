@@ -31,10 +31,13 @@ def main():
 
     DATA_PATH = '/mnt/c/PINN_mgr/FEniCS/solver-validation-newton-method/data/spe_model2_layer50.npy'
     kq_data_matrix, scale = load_and_scale_kq(DATA_PATH)
-    REAL_NX, REAL_NY = kq_data_matrix.shape
+    ACTUAL_NY, ACTUAL_NX = kq_data_matrix.shape
+    REAL_NX = ACTUAL_NX
+    REAL_NY = ACTUAL_NY
+
     FT_TO_M = 0.3048
-    REAL_LX = REAL_NX * 20 * FT_TO_M
-    REAL_LY = REAL_NY * 10 * FT_TO_M   
+    REAL_LX = REAL_NX * 20.0 * FT_TO_M
+    REAL_LY = REAL_NY * 10.0 * FT_TO_M   
 
     #ustawienia fenics
     domain = mesh.create_rectangle(MPI.COMM_WORLD, [np.array([0, 0]), np.array([REAL_LX, REAL_LY])], [REAL_NX, REAL_NY])
@@ -43,13 +46,13 @@ def main():
     #interpolacja kq
     x_coords = np.linspace(0, REAL_LX, REAL_NX)
     y_coords = np.linspace(0, REAL_LY, REAL_NY)
-    interp_kq = RegularGridInterpolator((y_coords, x_coords), kq_data_matrix.T, bounds_error=False, fill_value=1.0)
+    interp_kq = RegularGridInterpolator((y_coords, x_coords), kq_data_matrix, bounds_error=False, fill_value=1.0)
 
     Kq_func = fem.Function(V)
     Kq_func.interpolate(lambda x: interp_kq(np.stack((x[1], x[0]), axis=-1)))
 
     u_n, h, uh = fem.Function(V), fem.Function(V), fem.Function(V)
-    u_n.interpolate(lambda x: np.where(np.sqrt((x[0]-REAL_LX/2)**2 + (x[1]-REAL_LY/2)**2) <= 20.0, 1.0, 0.0))
+    u_n.interpolate(lambda x: np.where(np.sqrt((x[0]-REAL_LX/2)**2 + (x[1]-REAL_LY/2)**2) <= 30.0, 1.0, 0.0))
 
     if h_type == "h=0":
         h.interpolate(lambda x: 0*x[0])
@@ -72,9 +75,11 @@ def main():
     "snes_type": "newtonls",
     "snes_linesearch_type": "bt", 
     "snes_rtol": 1e-6, 
-    "snes_atol": 1e-6, "ksp_type": 
-    "gmres", "pc_type": "hypre", 
-    "pc_hypre_type": "boomeramg"}, petsc_options_prefix="TimeStep")
+    "snes_atol": 1e-6, 
+    "ksp_type": "gmres", 
+    "pc_type": "hypre", 
+    "pc_hypre_type": "boomeramg"}, 
+    petsc_options_prefix="TimeStep")
 
 
     Path("results/fields").mkdir(parents=True, exist_ok=True)

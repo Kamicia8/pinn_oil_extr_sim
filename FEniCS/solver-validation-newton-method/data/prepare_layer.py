@@ -13,7 +13,7 @@ def extract_and_save_layer(layer_idx=50):
     
     layer = kx_3d[layer_idx, :, :]
     
-    np.save(PATH_OUTPUT, layer)
+    # np.save(PATH_OUTPUT, layer)
     print(f"Kształt macierzy {layer.shape}")
 
 if __name__ == "__main__":
