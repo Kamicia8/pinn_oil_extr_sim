@@ -7,3 +7,12 @@ __pycache__/
 *.dat
 *.npy
 torch_test.ipynb
+
+# pinnhp .gitignore
+.venv
+.idea
+results
+results_1D
+results_2D
+# **/__pycache__
+pinn_env
