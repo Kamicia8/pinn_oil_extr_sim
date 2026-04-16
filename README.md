@@ -10,8 +10,10 @@ Struktura repozytorium:
 
 ```text
 data_SPE/                               # analiza danych przepuszczalności ośrodka porowatego
-FEniCS/solver-validation-newton-method  # kod z wykorzystaniem narzędzia FEniCS w celu uzyskania danych do walidacji modeli PINN
-maczuga_pinn/                           # Vanilla PINN na podstawie kodu https://github.com/pmaczuga/pinn-notebooks/blob/master/PINN_heat_transfer_2d.ipynb
+FEniCS/solver-validation-newton-method  # kod z wykorzystaniem narzędzia FEniCS w celu 
+                                        uzyskania danych do walidacji modeli PINN
+maczuga_pinn/                           # Vanilla PINN na podstawie 
+                                        kodu https://github.com/pmaczuga/pinn-notebooks/blob/master/PINN_heat_transfer_2d.ipynb
 pinn_hp/                                # PINN na podstawie repozytorium https://github.com/JanTry/PINN_HP
 vpinn/                                  # VPINN 
 ```

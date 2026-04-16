@@ -72,14 +72,14 @@ def main():
     bc = fem.dirichletbc(PETSc.ScalarType(0), fem.locate_dofs_topological(V, fdim, boundary_facets), V) 
 
     problem = NonlinearProblem(F, uh, bcs=[bc], petsc_options={
-    "snes_type": "newtonls",
-    "snes_linesearch_type": "bt", 
-    "snes_rtol": 1e-6, 
-    "snes_atol": 1e-6, 
-    "ksp_type": "gmres", 
-    "pc_type": "hypre", 
-    "pc_hypre_type": "boomeramg"}, 
-    petsc_options_prefix="TimeStep")
+        "snes_type": "newtonls",
+        "snes_linesearch_type": "bt", 
+        "snes_rtol": 1e-6, 
+        "snes_atol": 1e-6, 
+        "ksp_type": "gmres", 
+        "pc_type": "hypre", 
+        "pc_hypre_type": "boomeramg"}, 
+        petsc_options_prefix="TimeStep")
 
 
     Path("results/fields").mkdir(parents=True, exist_ok=True)
@@ -100,6 +100,9 @@ def main():
     log_interval = max(1, num_steps // 5) 
 
     log_map(domain, u_n, 0.0, "Stan początkowy", REAL_LX, REAL_LY, REAL_NX, REAL_NY)
+
+    percentages = [0.02, 0.05, 0.1, 0.15]
+    extra_checkpoints = [int(p * num_steps) for p in percentages]
 
 
     for n in range(num_steps):
@@ -128,7 +131,7 @@ def main():
                 "newton_iterations": num_its
                 })
 
-        if (n + 1) % log_interval == 0 or (n + 1) == num_steps:
+        if (n + 1) % log_interval == 0 or (n + 1) == num_steps or (n + 1) in extra_checkpoints:
             log_map(domain, uh, t, "Krok czasowy", REAL_LX, REAL_LY, REAL_NX, REAL_NY)
 
         u_n.x.array[:] = uh.x.array

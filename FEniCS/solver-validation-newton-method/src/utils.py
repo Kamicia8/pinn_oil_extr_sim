@@ -37,9 +37,17 @@ def log_map(domain, uh, t, label, REAL_LX, REAL_LY, REAL_NX, REAL_NY):
         U_plot = griddata(flat_pts, flat_values, (X, Y), method='linear')
 
         plt.figure(figsize=(10, 14))
-        plt.imshow(U_plot, extent=[0, REAL_LX, 0, REAL_LY], cmap='jet', origin='lower')
-        plt.colorbar(label="Ciśnienie u")
-        plt.title(f"{label}  t={t:.2f}")
+
+        im = plt.imshow(U_plot, extent=[0, REAL_LX, 0, REAL_LY], cmap='jet', origin='lower')
+        
+        cbar = plt.colorbar(im)
+        cbar.set_label("Ciśnienie u", fontsize=22)
+        cbar.ax.tick_params(labelsize=22, rotation=35)
+        
+        plt.xticks(fontsize=20) 
+        plt.yticks(fontsize=20)
+        plt.title(f"{label}  t={t:.2f}", fontsize=22)
+        # plt.tight_layout()
 
         wandb.log({"evolution_map": wandb.Image(plt)}, commit=False)
 
