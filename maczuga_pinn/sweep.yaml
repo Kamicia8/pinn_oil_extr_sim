@@ -1,6 +1,10 @@
 program: pinn_kq_grid_morepoints.py
 method: bayes
 
+metric:
+  name: total_loss
+  goal: minimize
+
 parameters:
   learning_rate:
     values: [0.001]
