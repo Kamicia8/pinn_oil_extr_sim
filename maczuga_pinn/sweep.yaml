@@ -1,0 +1,31 @@
+program: pinn_kq_grid_morepoints.py
+method: bayes
+
+parameters:
+  learning_rate:
+    value: [0.001, 0.0005, 0.0001]
+  layers:
+    value: [8, 16, 32, 64]
+  neurons_per_layer:
+    value: [20, 40, 60, 80]
+  num_epochs:
+    value: [1000, 2000, 3000]
+  activation_function:
+    value: ['tanh', 'relu', 'sigmoid']
+  N_POINTS_T:
+    value: [10, 20]
+  interior_points:
+    value: [1000, 2000, 3000]
+  boundary_points:
+    value: [100, 200, 300]
+  initial_points:
+    value: [100, 200, 300]
+  weight_residual:
+    value: [1.0]
+  weight_initial:
+    value: [1.0]
+  weight_boundary:
+    value: [1.0]
+  
+
+  
