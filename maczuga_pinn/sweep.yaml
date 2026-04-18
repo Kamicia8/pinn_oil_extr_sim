@@ -1,4 +1,4 @@
-program: pinn_kq_grid_morepoints.py
+program: Vanilla PINN Hyperparameter Sweep
 method: bayes
 
 metric:
@@ -6,27 +6,29 @@ metric:
   goal: minimize
 
 parameters:
+  optimizer:
+    values: ['Adam', 'LBFGS']
   learning_rate:
-    values: [0.001]
+    values: [0.001, 0.0001, 0.00001]
   layers:
     values: [8, 16]
   neurons_per_layer:
     values: [20]
   num_epochs:
-    values: [1000]
+    values: [1000, 5000, 10000, 20000]
   activation_function:
-    values: ['tanh']
+    values: ['tanh', 'sigmoid', 'swish']
   N_POINTS_T:
-    values: [10]
+    values: [10, 20]
   interior_points:
-    values: [1000]
+    values: [1000, 5000, 10000, 50000]
   boundary_points:
-    values: [1000]
+    values: [1000, 5000, 10000, 50000]
   initial_points:
-    values: [1000]
-  weight_residual:
+    values: [1000, 5000, 10000, 50000]
+  weight_residual: #hardcoded
     values: [1.0]
-  weight_initial:
+  weight_initial: #hardcoded
     values: [1.0]
-  weight_boundary:
+  weight_boundary: #hardcoded
     values: [1.0]
