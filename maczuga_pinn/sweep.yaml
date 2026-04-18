@@ -1,34 +1,77 @@
 program: Vanilla PINN Hyperparameter Sweep
-method: bayes
+method: grid
 
 metric:
   name: total_loss
   goal: minimize
 
 parameters:
-  optimizer:
-    values: ['Adam', 'lbfgs']
-  learning_rate:
-    values: [0.001, 0.0001, 0.00001]
-  layers:
-    values: [8, 16]
-  neurons_per_layer:
-    values: [20]
-  num_epochs:
-    values: [1000, 5000, 10000, 20000]
-  activation_function:
-    values: ['tanh', 'sigmoid', 'swish']
-  N_POINTS_T:
-    values: [10, 20]
-  interior_points:
-    values: [1000, 5000, 10000, 50000]
-  boundary_points:
-    values: [1000, 5000, 10000, 50000]
-  initial_points:
-    values: [1000, 5000, 10000, 50000]
-  weight_residual: #hardcoded
-    values: [1.0]
-  weight_initial: #hardcoded
-    values: [1.0]
-  weight_boundary: #hardcoded
-    values: [1.0]
+  set:
+    values:
+    - optimizer: 'Adam'
+      learning_rate: 0.001
+      layers: 8
+      neurons_per_layer: 20
+      num_epochs: 10000
+      activation_function: 'tanh'
+      N_POINTS_T: 20
+      interior_points: 10000
+      boundary_points: 10000
+      initial_points: 10000
+      weight_residual: 1.0
+      weight_initial: 1.0
+      weight_boundary: 1.0
+      
+    - optimizer: 'Adam'
+      learning_rate: 0.0001
+      layers: 8
+      neurons_per_layer: 20
+      num_epochs: 10000
+      activation_function: 'tanh'
+      N_POINTS_T: 20
+      interior_points: 10000
+      boundary_points: 10000
+      initial_points: 10000
+      weight_residual: 1.0
+      weight_initial: 1.0
+      weight_boundary: 1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # optimizer:
+  #   values: ['Adam', 'lbfgs'] #, 'lbfgs'
+  # learning_rate:
+  #   values: [0.001, 0.0001, 0.00001]
+  # layers:
+  #   values: [8, 16]
+  # neurons_per_layer:
+  #   values: [20]
+  # num_epochs:
+  #   values: [1000, 5000, 10000, 20000]
+  # activation_function:
+  #   values: ['tanh', 'sigmoid', 'swish']
+  # N_POINTS_T:
+  #   values: [10, 20]
+  # interior_points:
+  #   values: [1000, 5000, 10000, 50000]
+  # boundary_points:
+  #   values: [1000, 5000, 10000, 50000]
+  # initial_points:
+  #   values: [1000, 5000, 10000, 50000]
+  # weight_residual: #hardcoded
+  #   values: [1.0]
+  # weight_initial: #hardcoded
+  #   values: [1.0]
+  # weight_boundary: #hardcoded
+  #   values: [1.0]
