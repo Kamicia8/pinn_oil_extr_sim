@@ -3,29 +3,26 @@ method: bayes
 
 parameters:
   learning_rate:
-    value: [0.001, 0.0005, 0.0001]
+    values: [0.001]
   layers:
-    value: [8, 16, 32, 64]
+    values: [8, 16]
   neurons_per_layer:
-    value: [20, 40, 60, 80]
+    values: [20]
   num_epochs:
-    value: [1000, 2000, 3000]
+    values: [1000]
   activation_function:
-    value: ['tanh', 'relu', 'sigmoid']
+    values: ['tanh']
   N_POINTS_T:
-    value: [10, 20]
+    values: [10]
   interior_points:
-    value: [1000, 2000, 3000]
+    values: [1000]
   boundary_points:
-    value: [100, 200, 300]
+    values: [1000]
   initial_points:
-    value: [100, 200, 300]
+    values: [1000]
   weight_residual:
-    value: [1.0]
+    values: [1.0]
   weight_initial:
-    value: [1.0]
+    values: [1.0]
   weight_boundary:
-    value: [1.0]
-  
-
-  
+    values: [1.0]

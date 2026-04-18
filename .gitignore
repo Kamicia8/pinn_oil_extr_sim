@@ -8,6 +8,8 @@ __pycache__/
 *.npy
 torch_test.ipynb
 
+api_key.txt
+
 # pinnhp .gitignore
 .venv
 .idea
