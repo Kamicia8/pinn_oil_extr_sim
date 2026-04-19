@@ -9,6 +9,11 @@ __pycache__/
 torch_test.ipynb
 
 api_key.txt
+tea_debug.log
+
+models_T1000_h0
+models_T1_hsin
+
 
 # pinnhp .gitignore
 .venv

@@ -16,7 +16,7 @@ from physics import get_nonlinear_K, get_variational_form
 
 def main():
     if MPI.COMM_WORLD.rank == 0:
-        run = wandb.init(project="FEniCS-solver-for-comparison") 
+        run = wandb.init(project="FEniCS-solver-for-comparison_FINAL_RESULTS") 
         params = wandb.config.set
 
         config = [params["dt"], params["T"], params["u_coeff"], params["h_type"]]
@@ -100,8 +100,11 @@ def main():
     log_interval = max(1, num_steps // 5) 
 
     log_map(domain, u_n, 0.0, "Stan początkowy", REAL_LX, REAL_LY, REAL_NX, REAL_NY)
+    # npy_path_start = f"results/metrics/fenics_START_T0_{h_name_for_run}.npy"
+    npy_path_start = f"results/metrics/fenics_for_pinn_T_0_dt{dt}_u_coeff{u_coeff}_{h_name_for_run}.npy"
+    save_comparison_data(domain, u_n, REAL_LX, REAL_LY, REAL_NX, REAL_NY, kq_data_matrix, npy_path_start)
 
-    percentages = [0.02, 0.05, 0.1, 0.15]
+    percentages = [0.02, 0.05, 0.1, 0.15, 0.5]
     extra_checkpoints = [int(p * num_steps) for p in percentages]
 
 
@@ -133,6 +136,10 @@ def main():
 
         if (n + 1) % log_interval == 0 or (n + 1) == num_steps or (n + 1) in extra_checkpoints:
             log_map(domain, uh, t, "Krok czasowy", REAL_LX, REAL_LY, REAL_NX, REAL_NY)
+
+        if (n + 1) == num_steps // 2:
+            npy_path_mid = f"results/metrics/fenics_for_pinn_T_{t:.2f}_dt{dt}_u_coeff{u_coeff}_{h_name_for_run}.npy"
+            save_comparison_data(domain, uh, REAL_LX, REAL_LY, REAL_NX, REAL_NY, kq_data_matrix, npy_path_mid)
 
         u_n.x.array[:] = uh.x.array
         xdmf_file.write_function(uh, t)

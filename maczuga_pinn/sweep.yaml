@@ -8,34 +8,68 @@ metric:
 parameters:
   set:
     values:
-    - optimizer: 'Adam'
-      learning_rate: 0.001
-      layers: 8
-      neurons_per_layer: 20
-      num_epochs: 10000
-      activation_function: 'tanh'
-      N_POINTS_T: 20
-      interior_points: 10000
-      boundary_points: 10000
-      initial_points: 10000
-      weight_residual: 1.0
-      weight_initial: 1.0
-      weight_boundary: 1.0
-      
-    - optimizer: 'Adam'
-      learning_rate: 0.0001
-      layers: 8
-      neurons_per_layer: 20
-      num_epochs: 10000
-      activation_function: 'tanh'
-      N_POINTS_T: 20
-      interior_points: 10000
-      boundary_points: 10000
-      initial_points: 10000
-      weight_residual: 1.0
-      weight_initial: 1.0
-      weight_boundary: 1.0
+    #test
+    # - optimizer: 'Adam'
+    #   learning_rate: 0.001
+    #   layers: 8
+    #   neurons_per_layer: 20
+    #   num_epochs: 10000
+    #   activation_function: 'tanh'
+    #   N_POINTS_T: 20
+    #   interior_points: 10000
+    #   boundary_points: 10000
+    #   initial_points: 10000
+    #   weight_residual: 1.0
+    #   weight_initial: 1.0
+    #   weight_boundary: 1.0
 
+#################### Adam ####################
+
+
+### głęboka vs szeroka scieć
+      
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 4, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 8, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 16, neurons_per_layer: 8, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 16, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    ### swish 
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 4, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 8, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 16, neurons_per_layer: 8, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.0001, layers: 16, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+### 
 
 
 
