@@ -1,0 +1,158 @@
+program: Vanilla PINN Hyperparameter Sweep
+method: grid
+
+metric:
+  name: total_loss
+  goal: minimize
+
+parameters:
+  set:
+    values:
+
+
+### Adam vs LBFGS
+
+    # - {optimizer: 'Adam', learning_rate: 0.001, layers: 8, neurons_per_layer: 32, num_epochs: 5000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.0001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+    
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+
+    # - {optimizer: 'lbfgs', max_iter: 50, learning_rate: 1.0, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 40, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 250, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.1, layers: 8, neurons_per_layer: 32, num_epochs: 500, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+
+
+# ### Adam
+
+
+# #### głebokość vs szerokość
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 16, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+    
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 16, neurons_per_layer: 4, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 16, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+# #### punkty
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 20000, boundary_points: 5000, initial_points: 5000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 5000, boundary_points: 15000, initial_points: 15000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 5000, initial_points: 15000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+
+# #### aktywacje
+
+    - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 20000, boundary_points: 5000, initial_points: 5000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'sigmoid', N_POINTS_T: 20,
+      interior_points: 20000, boundary_points: 5000, initial_points: 5000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'Adam', learning_rate: 0.00001, layers: 4, neurons_per_layer: 128, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 20000, boundary_points: 5000, initial_points: 5000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+
+# ### LBFGS
+
+# #### głebokość vs szerokość
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 16, neurons_per_layer: 16, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 4, neurons_per_layer: 128, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+    
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 16, neurons_per_layer: 4, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 4, neurons_per_layer: 16, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 10000, initial_points: 10000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+# #### punkty
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 20000, boundary_points: 5000, initial_points: 5000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 5000, boundary_points: 15000, initial_points: 15000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    # - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+    #   interior_points: 10000, boundary_points: 5000, initial_points: 15000,
+    #   weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+# #### aktywacje  
+  
+    - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'swish', N_POINTS_T: 20,
+      interior_points: 5000, boundary_points: 15000, initial_points: 15000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'sigmoid', N_POINTS_T: 20,
+      interior_points: 5000, boundary_points: 15000, initial_points: 15000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+    - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
+      interior_points: 5000, boundary_points: 15000, initial_points: 15000,
+      weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

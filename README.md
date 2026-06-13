@@ -17,8 +17,6 @@ FEniCS/solver-validation-newton-method  # kod z wykorzystaniem narzędzia FEniCS
 maczuga_pinn/                           # Vanilla PINN na podstawie 
                                         kodu https://github.com/pmaczuga/pinn-notebooks/blob/master/PINN_heat_transfer_2d.ipynb
 
-pinn_hp/                                # PINN na podstawie repozytorium https://github.com/JanTry/PINN_HP
-
 vpinn/                                  # VPINN 
 ```
 
