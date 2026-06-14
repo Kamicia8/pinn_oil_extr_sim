@@ -10,7 +10,7 @@ parameters:
     values:
 
 
-    - {optimizer: 'Adam', learning_rate: 0.00001, layers: 8, neurons_per_layer: 32, num_epochs: 10000, activation_function: 'tanh', N_POINTS_T: 20, interior_points: 10000, boundary_points: 10000, initial_points: 10000, weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 5, quadrature_points: 40}
+    - {optimizer: 'Adam', learning_rate: 0.00001, layers: 8, neurons_per_layer: 32, num_epochs: 5000, activation_function: 'tanh', N_POINTS_T: 20, interior_points: 10000, boundary_points: 10000, initial_points: 10000, weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 5, quadrature_points: 40}
 
 
     - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.5, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20, interior_points: 10000, boundary_points: 10000, initial_points: 10000,weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 5, quadrature_points: 40}
