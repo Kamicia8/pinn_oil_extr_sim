@@ -28,6 +28,7 @@ parameters:
       weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 3, quadrature_points: 40}
 
 
+
     - {optimizer: 'lbfgs', max_iter: 50, learning_rate: 1.0, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
       interior_points: 10000, boundary_points: 10000, initial_points: 10000,
       weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 3, quadrature_points: 40}    
@@ -39,10 +40,7 @@ parameters:
     - {optimizer: 'lbfgs', max_iter: 20, learning_rate: 0.1, layers: 8, neurons_per_layer: 32, num_epochs: 500, activation_function: 'tanh', N_POINTS_T: 20,
       interior_points: 10000, boundary_points: 10000, initial_points: 10000,
       weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0, test_points: 3, quadrature_points: 40}
-
-
-
-      
+     
     - {optimizer: 'lbfgs', max_iter: 50, learning_rate: 0.1, layers: 8, neurons_per_layer: 32, num_epochs: 200, activation_function: 'tanh', N_POINTS_T: 20,
       interior_points: 10000, boundary_points: 10000, initial_points: 10000,
       weight_residual: 1.0, weight_initial: 1.0, weight_boundary: 1.0,  test_points: 2, quadrature_points: 40}
